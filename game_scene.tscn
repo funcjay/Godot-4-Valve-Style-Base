@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://ooowfuadx3i3"]
+
+[ext_resource type="Environment" uid="uid://dpw3otiyetgrb" path="res://env-default.tres" id="1_7rhjk"]
+[ext_resource type="PackedScene" uid="uid://cvc0yqj6x4gve" path="res://entities/ent-player.tscn" id="1_78tql"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_8dtut"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lixc4"]
+
+[node name="GameScene" type="Node3D"]
+
+[node name="GameEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_7rhjk")
+
+[node name="GameSkyLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, 0.683013, -0.183013, 0, 0.258819, 0.965926, 0.707107, -0.683013, 0.183013, 0, 8, 0)
+directional_shadow_split_1 = 0.5
+directional_shadow_split_2 = 0.8
+directional_shadow_split_3 = 1.0
+directional_shadow_blend_splits = true
+
+[node name="ENT-Player" parent="." instance=ExtResource("1_78tql")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0248632, 0)
+
+[node name="TestFloor" type="StaticBody3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 0.1, 0, 0, 0, 100, 0, -0.05, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestFloor"]
+mesh = SubResource("BoxMesh_8dtut")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestFloor"]
+shape = SubResource("BoxShape3D_lixc4")

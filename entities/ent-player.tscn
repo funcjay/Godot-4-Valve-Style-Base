@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvc0yqj6x4gve"]
+
+[ext_resource type="Script" path="res://entities/ent-player.gd" id="1_vf6bg"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dsv1x"]
+radius = 0.3
+height = 1.75
+
+[node name="ENT-Player" type="CharacterBody3D"]
+script = ExtResource("1_vf6bg")
+hold_jump_to_bhop = true
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
+shape = SubResource("CapsuleShape3D_dsv1x")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+
+[node name="Camera" type="Camera3D" parent="Head"]
+near = 0.001
+
+[node name="CasterUse" type="RayCast3D" parent="Head"]
+enabled = false
+target_position = Vector3(0, 0, -1)
+
+[node name="AudioPlayerVoice" type="AudioStreamPlayer" parent="Head"]
+max_polyphony = 16
+
+[node name="AudioPlayerFeet" type="AudioStreamPlayer" parent="."]
+max_polyphony = 16

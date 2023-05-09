@@ -1,0 +1,19 @@
+{
+	"groups": [
+		{
+			"name": "Feet",
+			"vol": -10,
+			"sounds": [
+				{
+					"name": "Default",
+					"files": [
+						"res://assets/snd/feet/default_r1.ogg",
+						"res://assets/snd/feet/default_r2.ogg",
+						"res://assets/snd/feet/default_l1.ogg",
+						"res://assets/snd/feet/default_l2.ogg"
+					]
+				}
+			]
+		}
+	]
+}
