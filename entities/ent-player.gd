@@ -7,10 +7,17 @@
 #	Adapted for Godot 4.0 by Jay!
 #
 
+#
+#	This will eventually get either a heavy rework, or a from-scratch rewrite.
+#	Needs to be more accurate to GoldSource.
+#
+
 extends CharacterBody3D
 
 
 # TEMP step types
+# this needs to be reworked.
+# step types should probably be separate resources.
 enum {
 	STEP_DEFAULT = 0,
 	STEP_METAL,
@@ -89,6 +96,9 @@ func _play_step_sound(step_type: int = STEP_DEFAULT, step_vol: float = 0) -> voi
 	step_left = 0 if step_left == 1 else 1
 	var step_n : int = randi_range(0, 1) + step_left * 2
 	
+	# TEMP
+	# this needs to be reworked.
+	# step types should probably be separate resources.
 	var step_snd : String = "Default"
 	match step_type:
 		STEP_METAL:	step_snd = "Metal"
@@ -288,10 +298,6 @@ func _input(event: InputEvent) -> void:
 	# Ensure that the cursor is locked
 	if not mouse_locked() and Input.is_action_just_pressed("attack"):
 		_mouse_lock(true)
-	
-	# TEMP
-	if mouse_locked() and Input.is_action_just_pressed("attack"):
-		_play_step_sound()
 	
 	# Get mouse movement
 	if mouse_locked() and event is InputEventMouseMotion:

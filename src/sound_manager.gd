@@ -1,3 +1,10 @@
+#
+#	Generic sound manager object
+#
+#	Handles choosing and playing sounds through a desired player.
+#	Reads entries from the "soundlist.json" file.
+#
+
 extends Node
 
 
@@ -6,6 +13,8 @@ var raw : String = FileAccess.get_file_as_string(file)
 var dict : Dictionary = JSON.parse_string(raw)
 
 
+## get_sounds(group, sound)
+## Returns an array of files (and their playback parameters) from the specified group/sound combo.
 func get_sounds(group: String, sound: String) -> Array:
 	var groups : Array = dict.get("groups")
 	
@@ -50,6 +59,9 @@ func get_sounds(group: String, sound: String) -> Array:
 	
 	return found_sounds
 
+## get_sound(group, sound, n)
+## Returns a random file (and it's playback parameters) from the specified group/sound combo.
+## If `n` is 0 or higher, returns the file at that specific index in the sound's "files" list.
 func get_sound(group: String, sound: String, n: int = -1) -> Array:
 	var got := get_sounds(group, sound)
 	if got.is_empty():
@@ -61,6 +73,9 @@ func get_sound(group: String, sound: String, n: int = -1) -> Array:
 	else:
 		return got[n]
 
+## play_sound(player, group, sound, n, vol, pitch)
+## Plays a sound through the specified AudioStreamPlayer node.
+## Optionally allows modifying the volume and pitch defined in the soundlist file.
 func play_sound(player, group: String, sound: String, n: int = -1, vol: float = 0, pitch: float = 1) -> void:
 	if not player is AudioStreamPlayer and not player is AudioStreamPlayer2D and not player is AudioStreamPlayer3D:
 		printerr("SoundManager (play_sound): Provided player is not an AudioStreamPlayer!")
