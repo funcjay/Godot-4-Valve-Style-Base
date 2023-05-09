@@ -42,6 +42,7 @@ class Cmd:
 @onready var Cam : Camera3D = $Head/Camera
 @onready var CasterUse : RayCast3D = $Head/CasterUse
 @onready var AudioPlayerVoice : AudioStreamPlayer = $Head/AudioPlayerVoice
+@onready var AudioPlayerUse : AudioStreamPlayer = $Head/AudioPlayerUse
 @onready var AudioPlayerFeet : AudioStreamPlayer = $AudioPlayerFeet
 
 # Exports
@@ -90,8 +91,11 @@ func _mouse_lock(state: bool) -> void:
 func mouse_locked() -> bool:
 	return true if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED else false
 
+func _reduce_delays(delta: float) -> void:
+	step_delay = clampf(step_delay - delta, 0, 1)
 
-# Misc helper funcs
+
+# Footstep funcs
 func _play_step_sound(step_type: int = STEP_DEFAULT, step_vol: float = 0) -> void:
 	step_left = 0 if step_left == 1 else 1
 	var step_n : int = randi_range(0, 1) + step_left * 2
@@ -125,8 +129,8 @@ func _update_step_sound() -> void:
 	
 	var fvol : float = 1
 	if is_on_floor() and vel_speed > 0 and (vel_speed >= vel_walk or step_delay == 0):
-		fvol = 0.7 if slow_walking else 1.0
-		step_delay = 0.4 if slow_walking else 0.3
+		fvol = -6 if slow_walking else 0
+		step_delay = 0.45 if slow_walking else 0.35
 		_play_step_sound(STEP_DEFAULT, fvol)
 
 
@@ -266,12 +270,19 @@ func _air_move(delta: float) -> void:
 	player_vel.y -= gravity * delta
 
 
+# Interaction funcs
+func _dispatch_use() -> void:
+	# TEMP
+	# just play the usefail sound for now
+	SoundManager.play_sound(AudioPlayerUse, "Player", "UseFail")
+
+
 # Base funcs
 func _ready() -> void:
 	_mouse_lock(true)
 
 func _physics_process(delta: float) -> void:
-	step_delay = clampf(step_delay - delta, 0, 1)
+	_reduce_delays(delta)
 	_update_step_sound()
 	
 	# Custom movement
@@ -299,10 +310,16 @@ func _input(event: InputEvent) -> void:
 	if not mouse_locked() and Input.is_action_just_pressed("attack"):
 		_mouse_lock(true)
 	
-	# Get mouse movement
-	if mouse_locked() and event is InputEventMouseMotion:
-		rotate_y(deg_to_rad(-event.relative.x * sens_final))
-		Head.rotate_x(deg_to_rad(-event.relative.y * sens_final))
+	if mouse_locked():
+		# Get mouse movement
+		if event is InputEventMouseMotion:
+			rotate_y(deg_to_rad(-event.relative.x * sens_final))
+			Head.rotate_x(deg_to_rad(-event.relative.y * sens_final))
+			
+			# Clamp rotation
+			Head.rotation.x = clamp(Head.rotation.x, deg_to_rad(-max_look_angle), deg_to_rad(max_look_angle))
 		
-		# Clamp rotation
-		Head.rotation.x = clamp(Head.rotation.x, deg_to_rad(-max_look_angle), deg_to_rad(max_look_angle))
+		# Handle the use action
+		if Input.is_action_just_pressed("use"):
+			_dispatch_use()
+	

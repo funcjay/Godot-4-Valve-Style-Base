@@ -25,7 +25,10 @@ enabled = false
 target_position = Vector3(0, 0, -1)
 
 [node name="AudioPlayerVoice" type="AudioStreamPlayer" parent="Head"]
-max_polyphony = 16
+max_polyphony = 4
+
+[node name="AudioPlayerUse" type="AudioStreamPlayer" parent="Head"]
+max_polyphony = 4
 
 [node name="AudioPlayerFeet" type="AudioStreamPlayer" parent="."]
 max_polyphony = 16

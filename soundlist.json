@@ -1,6 +1,18 @@
 {
 	"groups": [
 		{
+			"name": "Player",
+			"vol": -10,
+			"sounds": [
+				{
+					"name": "UseFail",
+					"files": [
+						"res://assets/snd/player/use_fail.ogg"
+					]
+				}
+			]
+		},
+		{
 			"name": "Feet",
 			"vol": -10,
 			"sounds": [
